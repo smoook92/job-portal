@@ -1,19 +1,28 @@
 <?php
-define('DB_HOST', '127.0.0.1');
-define('DB_NAME', 'job-portal');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_CHARSET', 'utf8mb4');
+declare(strict_types=1);
 
-// Uploads
-define('UPLOAD_DIR', __DIR__ . '/../public/uploads/');
-define('UPLOAD_URL', '/public/uploads/');
+return (object)[
+    // Database (use real secrets in env or outside repo)
+    'db' => (object)[
+        'host' => '127.0.0.1',
+        'port' => 3306,
+        'name' => 'job_portal',
+        'user' => 'root',
+        'pass' => '',
+        'charset' => 'utf8mb4'
+    ],
 
-// Site settings
-define('SITE_NAME', 'JobPortal');
-define('SITE_EMAIL', 'noreply@jobportal.local');
+    // App/site settings
+    'site' => (object)[
+        'base_url' => 'http://job-portal/public', // change to your production URL
+        'uploads_path' => __DIR__ . '/../public/uploads',
+        'uploads_url' => '/public/uploads',
+        'max_resume_size' => 2 * 1024 * 1024, // 2 MB
+        'allowed_resume_types' => ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document']
+    ],
 
-// Start session
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+    // Security
+    'session' => (object)[
+        'name' => 'jobportal_session'
+    ]
+];
