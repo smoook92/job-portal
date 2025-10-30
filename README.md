@@ -39,21 +39,22 @@ This platform allows **job seekers** to create profiles and apply for jobs, **em
 
 ## 📂 Project Structure
 
+```
 /job-portal
 │
-├── /config # Configuration files: DB, constants, ACL
-├── /includes # PHP helper functions, auth, DB connection
-├── /templates # Header, footer, navbar, alerts
-├── /assets # CSS, JS, images
-├── /public # Public pages: index, jobs, login, register, uploads
-├── /user # Job seeker dashboard, profile, applications
-├── /employer # Employer dashboard, jobs, applicants
-├── /admin # Admin panel: users, jobs, categories, settings
-├── /api # AJAX/JSON endpoints
-├── /sql # Database schema
-├── /tests # Basic test scripts
+├── /config           # Configuration files: DB, constants, ACL
+├── /includes         # PHP helper functions, auth, DB connection
+├── /templates        # Header, footer, navbar, alerts
+├── /assets           # CSS, JS, images
+├── /public           # Public pages: index, jobs, login, register, uploads
+├── /user             # Job seeker dashboard, profile, applications
+├── /employer         # Employer dashboard, jobs, applicants
+├── /admin            # Admin panel: users, jobs, categories, settings
+├── /api              # AJAX/JSON endpoints
+├── /sql              # Database schema
+├── /tests            # Basic test scripts
 └── README.md
-
+```
 
 ---
 
@@ -72,52 +73,80 @@ This platform allows **job seekers** to create profiles and apply for jobs, **em
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/smoook92/job-portal
+git clone https://github.com/yourusername/job-portal.git
 cd job-portal
+```
 
-2. Set up your MySQL database:
+2. Set up your **MySQL database**:
+
+```sql
 CREATE DATABASE job_portal;
 USE job_portal;
 
 -- Import schema
 SOURCE sql/schema.sql;
+```
 
-3. Configure database credentials in /config/config.php:
+3. Configure database credentials in `/config/config.php`:
+
+```php
 define('DB_HOST', 'localhost');
 define('DB_NAME', 'job_portal');
 define('DB_USER', 'root');
 define('DB_PASS', '');
+```
 
-4. Ensure /public/uploads folder is writable for CV uploads:
+4. Ensure `/public/uploads` folder is writable for CV uploads:
+
+```bash
 chmod 755 public/uploads
+```
 
-5. Run the application via local server (e.g., XAMPP, Laragon, OSPanel):
+5. Run the application via **local server** (e.g., XAMPP, Laragon, OSPanel):
+
+```
 http://localhost/job-portal/public/
+```
 
-📝 Usage
+---
 
-Job Seekers: Register → Edit profile → Browse jobs → Apply
+## 🗑️ Usage
 
-Employers: Register → Create jobs → Manage applicants
+- **Job Seekers:** Register → Edit profile → Browse jobs → Apply  
+- **Employers:** Register → Create jobs → Manage applicants  
+- **Admin:** Log in with admin user → Manage users, jobs, categories, settings
 
-Admin: Log in with admin user → Manage users, jobs, categories, settings
+---
 
-💡 Contributing
+## 💡 Contributing
 
-Contributions are welcome!
-Feel free to submit issues, feature requests, or pull requests. Please ensure:
+Contributions are welcome!  
+Feel free to submit **issues**, **feature requests**, or **pull requests**. Please ensure:
 
-Code is clean and follows existing structure
+- Code is clean and follows existing structure
+- New features include basic testing
+- Security best practices are maintained
 
-New features include basic testing
+---
 
-Security best practices are maintained
+## 📜 License
 
-📄 License
+This project is **open-source**. You are free to use and modify it.
 
-This project is open-source. You are free to use and modify it.
+---
 
-🌟 Demo
+## 🌟 Demo
 
-A working demo can be accessed after setup via your local server:
+A working demo can be accessed after setup via your local server:  
+
+```
 http://localhost/job-portal/public/
+```
+
+---
+
+## Author
+
+**Сорин** – Junior PHP Developer  
+Portfolio: [https://smoook92.github.io](https://smoook92.github.io)
+
