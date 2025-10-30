@@ -4,9 +4,9 @@ declare(strict_types=1);
 return (object)[
     // Database (use real secrets in env or outside repo)
     'db' => (object)[
-        'host' => '127.0.0.1',
+        'host' => 'localhost',
         'port' => 3306,
-        'name' => 'job_portal',
+        'name' => 'job-portal',
         'user' => 'root',
         'pass' => '',
         'charset' => 'utf8mb4'

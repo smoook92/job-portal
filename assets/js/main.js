@@ -1,3 +1,3 @@
-document.addEventListener('DOMContentLoaded', function() {
-  console.log("Job Portal frontend ready.");
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("Job Portal Frontend Loaded");
 });

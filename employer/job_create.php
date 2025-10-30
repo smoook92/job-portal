@@ -1,112 +1,51 @@
 <?php
-require_once __DIR__ . '/../includes/functions.php';
-require_once __DIR__ . '/../includes/auth.php';
-require_once __DIR__ . '/../includes/db.php';
-
-require_login('/public/login.php');
-if (!check_role('employer')) {
-    http_response_code(403);
-    echo "Forbidden";
-    exit;
-}
-
-$page_title = 'Create Job';
-$pdo = getPDO();
-
-$stmt = $pdo->prepare("SELECT id FROM employers WHERE user_id = :uid LIMIT 1");
-$stmt->execute([':uid' => $_SESSION['user_id']]);
-$employer = $stmt->fetch();
-if (!$employer) {
-    flash('danger', 'Employer profile not found. Please complete your employer profile first.');
-    header('Location: /employer/profile.php');
-    exit;
-}
+require_once "../includes/auth.php";
+requireRole('employer');
+require_once "../includes/db.php";
+require_once "../includes/functions.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        if (!csrf_check($_POST['_csrf'] ?? '')) {
-            throw new RuntimeException('Invalid CSRF token.');
-        }
+    $title = sanitize($_POST['title']);
+    $description = sanitize($_POST['description']);
+    $category_id = (int)$_POST['category_id'];
+    $employer_id = $_SESSION['user_id'];
 
-        $title = trim($_POST['title'] ?? '');
-        $slug = slugify($title);
-        $description = trim($_POST['description'] ?? '');
-        $location = trim($_POST['location'] ?? '');
-        $employment_type = $_POST['employment_type'] ?? 'full_time';
+    $stmt = $pdo->prepare("INSERT INTO jobs (title, description, category_id, employer_id, created_at)
+                           VALUES (?, ?, ?, ?, NOW())");
+    $stmt->execute([$title, $description, $category_id, $employer_id]);
 
-        if ($title === '' || $description === '') {
-            throw new RuntimeException('Title and description required.');
-        }
-
-        $stmt = $pdo->prepare("
-            INSERT INTO jobs (employer_id, title, slug, location, employment_type, description, responsibilities, requirements, benefits, status)
-            VALUES (:employer_id, :title, :slug, :location, :employment_type, :description, :responsibilities, :requirements, :benefits, :status)
-        ");
-        $stmt->execute([
-            ':employer_id' => $employer['id'],
-            ':title' => $title,
-            ':slug' => $slug,
-            ':location' => $location,
-            ':employment_type' => $employment_type,
-            ':description' => $description,
-            ':responsibilities' => $_POST['responsibilities'] ?? null,
-            ':requirements' => $_POST['requirements'] ?? null,
-            ':benefits' => $_POST['benefits'] ?? null,
-            ':status' => $_POST['status'] ?? 'published'
-        ]);
-
-        flash('success', 'Job created.');
-        header('Location: /employer/jobs.php');
-        exit;
-    } catch (Throwable $e) {
-        flash('danger', $e->getMessage());
-    }
+    flash('success', 'Job posted successfully.');
+    header("Location: /employer/jobs.php");
+    exit;
 }
-
-include __DIR__ . '/../templates/header.php';
-include __DIR__ . '/../templates/navbar.php';
-$flash = getFlash();
 ?>
-<div class="container py-4">
-  <h2>Create Job</h2>
-  <?php foreach ($flash as $type => $msg): ?>
-    <div class="alert alert-<?= e($type) ?>"><?= e($msg) ?></div>
-  <?php endforeach; ?>
 
-  <form method="post">
-    <input type="hidden" name="_csrf" value="<?= csrf_token() ?>">
+<?php include "../templates/header.php"; include "../templates/navbar.php"; ?>
+<main class="container py-4">
+  <h2>Post a New Job</h2>
+  <?php include "../templates/alerts.php"; ?>
+
+  <form method="POST">
     <div class="mb-3">
-      <label class="form-label">Title</label>
-      <input name="title" required class="form-control">
+      <label>Job Title</label>
+      <input type="text" name="title" class="form-control" required>
     </div>
+
     <div class="mb-3">
-      <label class="form-label">Location</label>
-      <input name="location" class="form-control">
+      <label>Description</label>
+      <textarea name="description" rows="5" class="form-control" required></textarea>
     </div>
+
     <div class="mb-3">
-      <label class="form-label">Type</label>
-      <select name="employment_type" class="form-select">
-        <option value="full_time">Full time</option>
-        <option value="part_time">Part time</option>
-        <option value="contract">Contract</option>
-        <option value="internship">Internship</option>
-        <option value="remote">Remote</option>
+      <label>Category</label>
+      <select name="category_id" class="form-select" required>
+        <option value="1">IT</option>
+        <option value="2">Marketing</option>
+        <option value="3">Finance</option>
       </select>
     </div>
-    <div class="mb-3">
-      <label class="form-label">Description</label>
-      <textarea name="description" required class="form-control" rows="6"></textarea>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Status</label>
-      <select name="status" class="form-select">
-        <option value="draft">Draft</option>
-        <option value="published" selected>Published</option>
-        <option value="closed">Closed</option>
-      </select>
-    </div>
-    <button class="btn btn-primary" type="submit">Create</button>
+
+    <button type="submit" class="btn btn-success">Publish Job</button>
   </form>
-</div>
-
-<?php include __DIR__ . '/../templates/footer.php'; ?>
+</main>
+<?php include "../templates/footer.php"; ?>
