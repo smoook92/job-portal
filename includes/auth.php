@@ -9,11 +9,15 @@ function registerUser($data) {
     global $pdo;
 
     $email = trim($data['email']);
-    $password = password_hash($data['password'], PASSWORD_BCRYPT);
+    $password = $_POST['password'] ?? null;  // ensure it's set
+    if (!$password) {
+        throw new Exception("Password cannot be empty.");
+    }
     $role = $data['role'] ?? 'user';
 
     $stmt = $pdo->prepare("INSERT INTO users (email, password, role) VALUES (?, ?, ?)");
-    $stmt->execute([$email, $password, $role]);
+    $stmt->execute([$email, $password_hash, $role]);
+
 
     return $pdo->lastInsertId();
 }
@@ -28,7 +32,7 @@ function loginUser($email, $password) {
     $stmt->execute([$email]);
     $user = $stmt->fetch();
 
-    if ($user && password_verify($password, $user['password'])) {
+        if ($user && isset($user['password_hash']) && password_verify($password, $user['password_hash'])) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['role'] = $user['role'];
         return true;
@@ -36,6 +40,7 @@ function loginUser($email, $password) {
 
     return false;
 }
+
 
 /**
  * Get currently logged-in user info

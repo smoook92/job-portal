@@ -6,19 +6,25 @@ require_once "../includes/auth.php";
 require_once "../includes/functions.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = sanitize($_POST['email']);
-    $password = $_POST['password'];
-    $role = $_POST['role'];
+    $email = trim($_POST['email']);
+    $password = $_POST['password'] ?? null;
+    $role = $_POST['role'] ?? 'user';
 
-    try {
-        registerUser(['email' => $email, 'password' => $password, 'role' => $role]);
+    if (!$password) {
+        flash('danger', 'Password cannot be empty.');
+    } else {
+        $password_hash = password_hash($password, PASSWORD_BCRYPT);
+
+        $stmt = $pdo->prepare("INSERT INTO users (email, password_hash, role) VALUES (?, ?, ?)");
+        $stmt->execute([$email, $password_hash, $role]);
+
         flash('success', 'Registration successful. Please login.');
         header("Location: login.php");
         exit;
-    } catch (Exception $e) {
-        flash('danger', 'Registration failed: ' . $e->getMessage());
     }
 }
+
+
 ?>
 
 <main class="container py-4">
