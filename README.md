@@ -1,93 +1,368 @@
-# Job Portal Web Application
+# Job Portal
 
-A **modern, responsive Job Portal** web application built with **PHP, MySQL, and Bootstrap 5**.  
-This platform allows **job seekers** to create profiles and apply for jobs, **employers** to post and manage jobs, and **administrators** to manage the entire system. Fully modular, secure, and designed for scalability.
+### Job Portal Web Application
+
+Modern responsive веб-приложение для поиска и размещения вакансий, разработанное на PHP, MySQL и Bootstrap 5.
+
+Система объединяет три основные группы пользователей — **соискателей, работодателей и администраторов** — и предоставляет каждой роли собственный набор функций и интерфейс управления.
+
+Проект разработан с модульной структурой PHP, разделением функциональности по ролям и использованием PDO для безопасной работы с базой данных.
 
 ---
 
-## 🚀 Features
+## Features
 
 ### Job Seekers
-- Register and login securely
-- Create and edit personal profiles
-- Upload CV / resume
-- Browse, search, and filter jobs
-- Apply to jobs and track application status
-- Save/favorite jobs for later
+
+Соискатели могут:
+
+* регистрироваться и авторизовываться;
+* создавать и редактировать профиль;
+* загружать CV / резюме;
+* просматривать вакансии;
+* искать вакансии;
+* фильтровать вакансии;
+* откликаться на вакансии;
+* отслеживать статус откликов;
+* сохранять вакансии в избранное.
 
 ### Employers
-- Register and login securely
-- Create, edit, and manage job listings
-- View and manage applicants per job
-- Edit company profile
 
-### Admin
-- Manage users (job seekers and employers)
-- Manage jobs and categories
-- Configure site settings
-- Dashboard with live statistics
+Работодатели могут:
 
-### Extra Features
-- Secure authentication using **password hashing**
-- Responsive design using **Bootstrap 5**
-- Modular PHP structure with reusable components
-- Prepared statements with PDO for secure database queries
-- Pagination and search/filter for jobs
-- Flash messages for notifications
+* регистрироваться и авторизовываться;
+* создавать вакансии;
+* редактировать вакансии;
+* управлять опубликованными вакансиями;
+* просматривать отклики на конкретную вакансию;
+* управлять кандидатами;
+* редактировать профиль компании.
+
+### Administration
+
+Административная часть позволяет:
+
+* управлять пользователями;
+* управлять соискателями и работодателями;
+* управлять вакансиями;
+* управлять категориями;
+* изменять настройки сайта;
+* просматривать статистику через dashboard.
+
+### Additional Features
+
+* password hashing;
+* PDO prepared statements;
+* pagination;
+* поиск и фильтрация;
+* flash messages;
+* AJAX / JSON endpoints;
+* адаптивный интерфейс;
+* переиспользуемые PHP-компоненты.
 
 ---
 
-## 📂 Project Structure
+## Application Flow
 
+Основные сценарии использования системы:
+
+```text
+Job Seeker
+    │
+    ├── Register
+    ├── Create Profile
+    ├── Upload CV
+    ├── Browse Jobs
+    ├── Search / Filter
+    ├── Apply
+    └── Track Applications
+
+
+Employer
+    │
+    ├── Register
+    ├── Create Company Profile
+    ├── Create Job
+    ├── Manage Jobs
+    └── Manage Applicants
+
+
+Admin
+    │
+    ├── Manage Users
+    ├── Manage Jobs
+    ├── Manage Categories
+    ├── Site Settings
+    └── Dashboard Statistics
 ```
-/job-portal
+
+---
+
+## Architecture
+
+Проект использует модульную архитектуру на чистом PHP без PHP-фреймворка.
+
+Основные части приложения разделены по назначению:
+
+```text
+Request
+   │
+   ▼
+Public Pages
+   │
+   ▼
+Authentication / Helpers
+   │
+   ▼
+Application Modules
+   │
+   ├── User
+   ├── Employer
+   └── Admin
+   │
+   ▼
+PDO
+   │
+   ▼
+MySQL / MariaDB
+```
+
+### Configuration
+
+`config/` содержит конфигурационные файлы приложения, включая настройки базы данных, константы и ACL.
+
+### Includes
+
+`includes/` содержит общие PHP-компоненты:
+
+* подключение к базе данных;
+* authentication helpers;
+* вспомогательные функции;
+* общую логику приложения.
+
+### Templates
+
+`templates/` содержит переиспользуемые элементы интерфейса:
+
+* header;
+* footer;
+* navbar;
+* alerts.
+
+### Public
+
+`public/` содержит публичные страницы приложения:
+
+* главную страницу;
+* страницы вакансий;
+* login;
+* register;
+* uploads.
+
+### User
+
+`user/` содержит функциональность кабинета соискателя:
+
+* dashboard;
+* профиль;
+* отклики;
+* связанные пользовательские операции.
+
+### Employer
+
+`employer/` содержит функциональность работодателя:
+
+* dashboard;
+* управление вакансиями;
+* управление кандидатами.
+
+### Admin
+
+`admin/` содержит административную панель:
+
+* пользователи;
+* вакансии;
+* категории;
+* настройки;
+* статистика.
+
+### API
+
+`api/` содержит AJAX / JSON endpoints для динамических операций приложения.
+
+---
+
+## Project Structure
+
+```text
+job-portal/
 │
-├── /config           # Configuration files: DB, constants, ACL
-├── /includes         # PHP helper functions, auth, DB connection
-├── /templates        # Header, footer, navbar, alerts
-├── /assets           # CSS, JS, images
-├── /public           # Public pages: index, jobs, login, register, uploads
-├── /user             # Job seeker dashboard, profile, applications
-├── /employer         # Employer dashboard, jobs, applicants
-├── /admin            # Admin panel: users, jobs, categories, settings
-├── /api              # AJAX/JSON endpoints
-├── /sql              # Database schema
-├── /tests            # Basic test scripts
+├── config/
+│   ├── DB configuration
+│   ├── Constants
+│   └── ACL
+│
+├── includes/
+│   ├── Database connection
+│   ├── Authentication
+│   └── Helper functions
+│
+├── templates/
+│   ├── Header
+│   ├── Footer
+│   ├── Navbar
+│   └── Alerts
+│
+├── assets/
+│   ├── CSS
+│   ├── JavaScript
+│   └── Images
+│
+├── public/
+│   ├── index
+│   ├── jobs
+│   ├── login
+│   ├── register
+│   └── uploads
+│
+├── user/
+│   ├── Dashboard
+│   ├── Profile
+│   └── Applications
+│
+├── employer/
+│   ├── Dashboard
+│   ├── Jobs
+│   └── Applicants
+│
+├── admin/
+│   ├── Users
+│   ├── Jobs
+│   ├── Categories
+│   └── Settings
+│
+├── api/
+│   └── AJAX / JSON endpoints
+│
+├── sql/
+│   └── Database schema
+│
+├── tests/
+│   └── Basic test scripts
+│
 └── README.md
 ```
 
 ---
 
-## 🛠 Technology Stack
+## Tech Stack
 
-- **Backend:** PHP 8+, PDO for database access  
-- **Database:** MySQL / MariaDB  
-- **Frontend:** Bootstrap 5, HTML5, CSS3, Vanilla JavaScript  
-- **Architecture:** Modular PHP with reusable templates  
-- **Authentication:** Secure login/register with password hashing  
+### Backend
+
+* PHP 8+
+* Pure PHP
+* PDO
+* Modular PHP architecture
+
+### Database
+
+* MySQL
+* MariaDB
+
+### Frontend
+
+* HTML5
+* CSS3
+* Bootstrap 5
+* Vanilla JavaScript
+
+### Authentication & Security
+
+* Password hashing
+* Prepared statements
+* Role-based access control
+
+### Additional
+
+* AJAX
+* JSON endpoints
+* Pagination
+* Search
+* Filtering
+* Flash messages
 
 ---
 
-## ⚙️ Installation
+## Database
 
-1. Clone the repository:
+Database schema находится в:
+
+```text
+sql/schema.sql
+```
+
+Проект использует реляционную базу данных для хранения информации, связанной с:
+
+* пользователями;
+* работодателями;
+* вакансиями;
+* категориями;
+* откликами;
+* профилями;
+* настройками приложения.
+
+---
+
+## Installation
+
+### Requirements
+
+Для запуска проекта требуется:
+
+* PHP 8+
+* MySQL или MariaDB
+* веб-сервер;
+* Bootstrap 5 и frontend-зависимости проекта.
+
+Для локальной разработки можно использовать:
+
+* XAMPP;
+* Laragon;
+* OSPanel;
+* другой локальный PHP-сервер.
+
+### 1. Clone repository
 
 ```bash
-git clone https://github.com/yourusername/job-portal.git
+git clone https://github.com/smoook92/job-portal.git
 cd job-portal
 ```
 
-2. Set up your **MySQL database**:
+### 2. Create database
+
+Создайте базу данных:
 
 ```sql
 CREATE DATABASE job_portal;
-USE job_portal;
 
--- Import schema
+USE job_portal;
+```
+
+Затем импортируйте схему:
+
+```sql
 SOURCE sql/schema.sql;
 ```
 
-3. Configure database credentials in `/config/config.php`:
+### 3. Configure database
+
+Откройте:
+
+```text
+config/config.php
+```
+
+и укажите параметры подключения:
 
 ```php
 define('DB_HOST', 'localhost');
@@ -96,57 +371,159 @@ define('DB_USER', 'root');
 define('DB_PASS', '');
 ```
 
-4. Ensure `/public/uploads` folder is writable for CV uploads:
+### 4. Configure uploads
+
+Каталог:
+
+```text
+public/uploads
+```
+
+должен быть доступен для записи приложению.
+
+В Linux:
 
 ```bash
 chmod 755 public/uploads
 ```
 
-5. Run the application via **local server** (e.g., XAMPP, Laragon, OSPanel):
+### 5. Start application
 
-```
+Для локальной разработки используйте настроенный веб-сервер.
+
+После запуска приложение будет доступно по адресу:
+
+```text
 http://localhost/job-portal/public/
 ```
 
 ---
 
-## 🗑️ Usage
+## User Roles
 
-- **Job Seekers:** Register → Edit profile → Browse jobs → Apply  
-- **Employers:** Register → Create jobs → Manage applicants  
-- **Admin:** Log in with admin user → Manage users, jobs, categories, settings
+Система построена вокруг трёх основных ролей:
 
----
+| Role         | Responsibilities                                         |
+| ------------ | -------------------------------------------------------- |
+| `Job Seeker` | Профиль, CV, поиск вакансий, отклики                     |
+| `Employer`   | Компания, вакансии, кандидаты                            |
+| `Admin`      | Пользователи, вакансии, категории, настройки, статистика |
 
-## 💡 Contributing
-
-Contributions are welcome!  
-Feel free to submit **issues**, **feature requests**, or **pull requests**. Please ensure:
-
-- Code is clean and follows existing structure
-- New features include basic testing
-- Security best practices are maintained
+Разделение ролей позволяет каждой категории пользователей работать только с соответствующей частью приложения.
 
 ---
 
-## 📜 License
+## Security
 
-This project is **open-source**. You are free to use and modify it.
+В проекте используются базовые механизмы защиты веб-приложения:
 
----
+### Password Hashing
 
-## 🌟 Demo
+Пароли пользователей не должны храниться в базе данных в открытом виде.
 
-A working demo can be accessed after setup via your local server:  
+### PDO Prepared Statements
 
+Для запросов к базе данных используются подготовленные выражения PDO, что позволяет безопаснее работать с пользовательскими данными.
+
+### Access Control
+
+Различные разделы приложения разделены по ролям:
+
+```text
+Job Seeker
+     │
+     └── User Dashboard
+
+Employer
+     │
+     └── Employer Dashboard
+
+Admin
+     │
+     └── Administration Panel
 ```
-http://localhost/job-portal/public/
+
+---
+
+## Application Modules
+
+### Job Management
+
+Работа с вакансиями включает:
+
+* создание;
+* редактирование;
+* управление;
+* поиск;
+* фильтрацию;
+* pagination.
+
+### Application Management
+
+Соискатели могут отправлять отклики и отслеживать их статус.
+
+Работодатели могут просматривать отклики по своим вакансиям и управлять кандидатами.
+
+### User Management
+
+Администратор может управлять пользователями различных типов.
+
+### Categories
+
+Администратор может создавать и управлять категориями вакансий.
+
+### Site Settings
+
+Административная часть содержит раздел управления настройками сайта.
+
+---
+
+## Development
+
+Проект построен таким образом, чтобы функциональность была разделена на отдельные модули.
+
+При добавлении нового функционала рекомендуется:
+
+```text
+1. Определить необходимую роль пользователя
+2. Добавить или изменить соответствующий модуль
+3. Реализовать серверную логику
+4. При необходимости добавить API endpoint
+5. Обновить database schema
+6. Добавить необходимые UI-компоненты
+7. Проверить доступ согласно роли пользователя
 ```
+
+---
+
+## Tests
+
+Базовые тестовые скрипты находятся в:
+
+```text
+tests/
+```
+
+---
+
+## Project Status
+
+Проект является полноценным практическим веб-приложением для работы с вакансиями и пользователями.
+
+Основная цель разработки — практика создания модульного PHP-приложения с несколькими ролями пользователей, базой данных, административной панелью и разделением функциональности по модулям.
+
+---
+
+## License
+
+Проект распространяется как open-source.
 
 ---
 
 ## Author
 
-**Сорин** – Junior PHP Developer  
-Portfolio: [https://smoook92.github.io](https://smoook92.github.io)
+**smook92**
 
+GitHub: [github.com/smoook92](https://github.com/smoook92)
+
+Portfolio: [smoook.ru](https://smoook.ru)
